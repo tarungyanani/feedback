@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h2 {
+            color: #1f2937;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .welcome-text {
+            color: #6b7280;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .feedback-list {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .feedback-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #4f46e5;
+        }
+
+        .feedback-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .manager-info {
+            font-weight: 600;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .feedback-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sentiment-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sentiment-positive {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .sentiment-negative {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .sentiment-neutral {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .feedback-date {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .feedback-content {
+            margin-bottom: 20px;
+        }
+
+        .feedback-section {
+            margin-bottom: 16px;
+        }
+
+        .feedback-section strong {
+            color: #1f2937;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .feedback-section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-left: 16px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .acknowledge-section {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .acknowledged-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #059669;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .acknowledge-btn {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .acknowledge-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .logout-section {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state h3 {
+            color: #6b7280;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 24px 20px;
+            }
+
+            .header h2 {
+                font-size: 28px;
+            }
+
+            .feedback-item {
+                padding: 20px;
+            }
+
+            .feedback-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .feedback-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .acknowledge-section {
+                justify-content: center;
+                margin-top: 16px;
+            }
+        }
+
+        /* Animation */
+        .container {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-item {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Employee Dashboard</h2>
+            <p class="welcome-text">Welcome, {{ request.user.username }}!</p>
+        </div>
+
+        {% if feedbacks %}
+        <ul class="feedback-list">
+            {% for fb in feedbacks %}
+            <li class="feedback-item">
+                <div class="feedback-header">
+                    <div class="manager-info">
+                        <strong>Manager:</strong> {{ fb.manager.username }}
+                    </div>
+                    <div class="feedback-meta">
+                        <span class="sentiment-badge sentiment-{{ fb.sentiment|lower }}">
+                            {{ fb.sentiment|title }}
+                        </span>
+                        <span class="feedback-date">
+                            {{ fb.created_at|date:"M d, Y - H:i" }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="feedback-content">
+                    <div class="feedback-section">
+                        <strong>Strengths:</strong>
+                        <p>{{ fb.strengths }}</p>
+                    </div>
+                    <div class="feedback-section">
+                        <strong>Areas for Improvement:</strong>
+                        <p>{{ fb.improvement_areas }}</p>
+                    </div>
+                </div>
+
+                <div class="acknowledge-section">
+                    <form method="post" action="{% url 'acknowledge_feedback' fb.id %}">
+                        {% csrf_token %}
+                        {% if fb.acknowledged %}
+                            <div class="acknowledged-status">
+                                <span>✅</span>
+                                <span>Acknowledged</span>
+                            </div>
+                        {% else %}
+                            <button type="submit" class="acknowledge-btn">
+                                Acknowledge Feedback
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">
+            <h3>No Feedback Yet</h3>
+            <p>You haven't received any feedback from your managers yet.</p>
+        </div>
+        {% endif %}
+
+        <div class="logout-section">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
